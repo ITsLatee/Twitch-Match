@@ -8,8 +8,9 @@ class SearchViewController: UIViewController {
         _ = createCardView()
     }
     
-    func createCardView() -> (cardView: UIView, photoCard: UIView) {
-        // Создаем основную карточку
+    func createCardView() -> (cardView: UIView, photoCard: UIView, nameCard: UILabel) {
+        
+        //MARK: Создаем основную карточку
         let cardView = UIView()
         view.addSubview(cardView) // Само отображение карточки
         cardView.frame = CGRect(x: 0, y: 0, width: 350, height: 600)
@@ -29,18 +30,18 @@ class SearchViewController: UIViewController {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         cardView.addGestureRecognizer(gesture)
         
-        // Создаем photoCard
-        let photoCard = UIView()
+        //MARK: Создаем photoCard
+        var photoCard = UIView()
         photoCard.backgroundColor = .black
         
         // Закругляем углы
         photoCard.layer.cornerRadius = 15
         
-        // Отключаем автоматическое создание констрейнтов
-        photoCard.translatesAutoresizingMaskIntoConstraints = false
-        
         // Добавляем photoCard как подпредставление cardView
         cardView.addSubview(photoCard)
+    
+        // Отключаем автоматическое создание констрейнтов
+        photoCard.translatesAutoresizingMaskIntoConstraints = false
         
         // Устанавливаем констрейнты для photoCard
         NSLayoutConstraint.activate([
@@ -50,7 +51,25 @@ class SearchViewController: UIViewController {
             photoCard.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20) // Отступ сверху
         ])
         
-        return (cardView, photoCard)
+        //MARK: Создаем никнейм на карточке
+        var nameCard = UILabel()
+        nameCard.text = "Пример"
+        nameCard.textColor = .black
+        nameCard.font = UIFont.boldSystemFont(ofSize: 40)
+        
+        cardView.addSubview(nameCard)
+        
+        // Отключаем автоматическое создание констрейнтов
+        nameCard.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Устанавливаем констрейнты для nameCard
+        NSLayoutConstraint.activate([
+            nameCard.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
+            nameCard.bottomAnchor.constraint(equalTo: cardView.topAnchor, constant: 470),
+            nameCard.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        return (cardView, photoCard, nameCard)
     }
     
     // Сложное обрабатывание свайпа
