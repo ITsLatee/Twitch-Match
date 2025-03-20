@@ -5,32 +5,55 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "TwichColor")
         
-        let card = createCardView()
-        
-        func createCardView() -> UIView {
-            let cardView = UIView()
-            view.addSubview(cardView) //Само отображение карточки
-            cardView.frame = CGRect(x: 0, y: 0, width: 350, height: 600)
-            cardView.backgroundColor = .white
-            cardView.center = view.center
-            
-            // Закругляем углы
-            cardView.layer.cornerRadius = 15
-            
-            // Добавляем тень
-            cardView.layer.shadowColor = UIColor.black.cgColor
-            cardView.layer.shadowOffset = CGSize(width: 0, height: 2)
-            cardView.layer.shadowOpacity = 0.3
-            cardView.layer.shadowRadius = 4
-            
-            //работаем с жестом свайпа
-            let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-            cardView.addGestureRecognizer(gesture)
-            return cardView
-        }
-        
+        _ = createCardView()
     }
-    //сложное обрабатывание свайпа
+    
+    func createCardView() -> (cardView: UIView, photoCard: UIView) {
+        // Создаем основную карточку
+        let cardView = UIView()
+        view.addSubview(cardView) // Само отображение карточки
+        cardView.frame = CGRect(x: 0, y: 0, width: 350, height: 600)
+        cardView.backgroundColor = .white
+        cardView.center = view.center
+        
+        // Закругляем углы
+        cardView.layer.cornerRadius = 15
+        
+        // Добавляем тень
+        cardView.layer.shadowColor = UIColor.black.cgColor
+        cardView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cardView.layer.shadowOpacity = 0.3
+        cardView.layer.shadowRadius = 4
+        
+        // Работаем с жестом свайпа
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        cardView.addGestureRecognizer(gesture)
+        
+        // Создаем photoCard
+        let photoCard = UIView()
+        photoCard.backgroundColor = .black
+        
+        // Закругляем углы
+        photoCard.layer.cornerRadius = 15
+        
+        // Отключаем автоматическое создание констрейнтов
+        photoCard.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Добавляем photoCard как подпредставление cardView
+        cardView.addSubview(photoCard)
+        
+        // Устанавливаем констрейнты для photoCard
+        NSLayoutConstraint.activate([
+            photoCard.widthAnchor.constraint(equalToConstant: 300), // Ширина
+            photoCard.heightAnchor.constraint(equalToConstant: 400), // Высота
+            photoCard.centerXAnchor.constraint(equalTo: cardView.centerXAnchor), // Центр по X
+            photoCard.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20) // Отступ сверху
+        ])
+        
+        return (cardView, photoCard)
+    }
+    
+    // Сложное обрабатывание свайпа
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard let card = gesture.view else { return }
         
